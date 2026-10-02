@@ -269,9 +269,9 @@
 	<key>OSAScriptingDefinition</key>
 	<string>Hammerspoon.sdef</string>
 	<key>SUEnableAutomaticChecks</key>
-	<true/>
+	<false/>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/Hammerspoon/hammerspoon/master/appcast.xml</string>
+	<string>https://raw.githubusercontent.com/servitola/hammerspoon/main/appcast-fork-disabled.xml</string>
 	<key>SUScheduledCheckInterval</key>
 	<integer>21600</integer>
 	<key>UTExportedTypeDeclarations</key>
