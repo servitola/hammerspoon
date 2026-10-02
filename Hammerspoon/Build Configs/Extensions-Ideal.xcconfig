@@ -12,7 +12,7 @@
 #include "Extensions-Base.xcconfig"
 
 // Add -Weverything to warning flags
-WARNING_CFLAGS = -Weverything $(inherited)
+WARNING_CFLAGS = -Weverything -Wno-unknown-warning-option -Wno-quoted-include-in-framework-header -Wno-implicit-void-ptr-cast -Wno-jump-misses-init -Wno-implicit-int-enum-cast -Wno-implicit-int-float-conversion -Wno-extra-semi-stmt $(inherited)
 
 // Treat warnings as errors
 GCC_TREAT_WARNINGS_AS_ERRORS = YES
