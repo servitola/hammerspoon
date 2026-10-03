@@ -52,7 +52,7 @@ after every rebase and whenever `.reference/FETCHED` names a commit other than H
    `uv run --with-requirements requirements.txt python3 scripts/docs/bin/build_docs.py -l -o /tmp Hammerspoon extensions/`
    (empty `annotations.json` = clean).
 5. **Build with warnings as errors on.** Never pass `GCC_TREAT_WARNINGS_AS_ERRORS=NO`:
-   `xcodebuild -workspace Hammerspoon.xcworkspace -scheme Release -configuration Release -destination platform=macOS -derivedDataPath build/dd CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO DEVELOPMENT_TEAM= build`
+   `xcodebuild -workspace Hammerspoon.xcworkspace -scheme Release -configuration Release -destination platform=macOS -derivedDataPath build/dd CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO DEVELOPMENT_TEAM= CLANG_ENABLE_CODE_COVERAGE=NO CLANG_COVERAGE_MAPPING=NO build`
 6. **Tests.** Upstream requires a test for every extension change: `Hammerspoon Tests/HS<module>.m`
    + `extensions/<module>/test_<module>.lua` (CONTRIBUTING.md, "Testing"). The test host is a
    second app with the same bundle id `org.hammerspoon.Hammerspoon` as the live one: it shares
@@ -73,5 +73,10 @@ after every rebase and whenever `.reference/FETCHED` names a commit other than H
   never exist locally: `remote.origin.tagOpt --no-tags`, delete them if a fetch brings one.
 - A plain `build` stamps `get-task-allow` on the `hs` CLI and notarization rejects the app;
   the job passes `CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO`.
+- A plain `build` also honours the scheme's "Gather coverage" (upstream's `archive` does
+  not): the product comes out instrumented and every `hs` call drops a `default.profraw` in
+  its cwd. Both `CLANG_ENABLE_CODE_COVERAGE=NO` and `CLANG_COVERAGE_MAPPING=NO` are needed —
+  the first alone leaves Sentry's Swift code and the link lines instrumented. The job refuses
+  to install a bundle where `grep -rl __llvm_prf` finds anything.
 - Signing must stay Developer ID `NZNV266K59`: Accessibility and Input Monitoring are pinned
   to it. A differently signed build loses both grants and with them every hotkey.
